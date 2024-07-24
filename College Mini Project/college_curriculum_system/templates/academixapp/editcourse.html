@@ -1,0 +1,142 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 bg-dark text-white border-end">
+            <div class="sidebar mt-4 p-2" style="height:100vh;">
+                <a href="{% url 'academixapp:index' %}" class="text-decoration-none text-reset">
+                    <div class="dashboard p-2 rounded-2">
+                        <p class="mb-0"><i class="bi bi-house-door"></i> Home</p>
+                    </div>
+                </a>
+                <a href="{% url 'auth:myprofile' %}" class="text-decoration-none text-reset">
+                    <div class="profile p-2 rounded-2 mt-2">
+                        <p class="mb-0"><i class="bi bi-person"></i> My Profile</p>
+                    </div>
+                </a>
+                <hr class="mx-auto">
+                {% if user.profile %}
+                {% if user.profile.user_type|lower == 'teacher' %}
+                <p class="mb-2"><b><i class="bi bi-person"></i> Instructor</b></p>
+                <a href="{% url 'academixapp:mycourses' %}" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> My Courses</p>
+                    </div>
+                </a>
+                <a href="{% url 'academixapp:enrolledcourses' %}" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2 mt-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> Enrolled Courses</p>
+                    </div>
+                </a>
+                {% else %}
+                <p class="mb-2"><b><i class="bi bi-person"></i> Student</b></p>
+                <a href="#" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> Enrolled Courses</p>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                <hr class="mx-auto">
+                <div class="profile logout p-2 rounded-2 mt-2">
+                    <a href="" class="text-decoration-none text-reset d-block"><i class="bi bi-box-arrow-right"></i>
+                        Log Out</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container mt-4 mb-4">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-md-5 d-flex justify-content-between position-relative">
+                            <div class="fs-4 bg-warning p-3 rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:55px;height:50px;">
+                                1
+                            </div>
+                            <div class="dashed-line"
+                                style="border-top: 4px dashed #000000; width: 500px; margin-top: 25px;"></div>
+                            <div class="fs-4 first-round bg-warning p-3 rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 55px; height: 50px; position: relative;">
+                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 35px; height: 35px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                    <span class="text-dark">2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-8 shadow-lg border">
+                        <div class="p-4 mt-2 rounded-4">
+                            <div class="form-group">
+                                <label for="course_title">Course Title</label>
+                                <input type="text" class="form-control mt-1 border" name="course_title"
+                                    id="course_title" style="height:50px;" placeholder="Enter Course Title" value="{{course.course_title}}" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_desc">Course Description</label>
+                                <textarea placeholder="Enter Description of the Course" class="mt-1 form-control border" name="course_desc" id="course_desc" cols="30" rows="5" required>{{course.course_desc}}</textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_branch">Course Branch <i class="bi bi-caret-down"></i></label><br />
+                                <select class="mt-1 form-control border" style="height:50px;" name="course_branch" id="course_branch" required>
+                                    <option value="COMPSA" {% if course.course_branch == 'COMPSA' %}selected{% endif %}>COMPSA</option>
+                                    <option value="ITSA" {% if course.course_branch == 'ITSA' %}selected{% endif %}>ITSA</option>
+                                    <option value="TEESA" {% if course.course_branch == 'TEESA' %}selected{% endif %}>TEESA</option>
+                                    <option value="EESA" {% if course.course_branch == 'EESA' %}selected{% endif %}>EESA</option>
+                                    <option value="MESA" {% if course.course_branch == 'MESA' %}selected{% endif %}>MESA</option>
+                                    <option value="CESA" {% if course.course_branch == 'CESA' %}selected{% endif %}>CESA</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_year">Course Year <i class="bi bi-caret-down"></i></label><br />
+                                <select class="mt-1 form-control border" style="height:50px;" name="course_year" id="course_year" required>
+                                    <option value="FY" {% if course.course_year == 'FY' %}selected{% endif %}>First Year</option>
+                                    <option value="SY" {% if course.course_year == 'SY' %}selected{% endif %}>Second Year</option>
+                                    <option value="TY" {% if course.course_year == 'TY' %}selected{% endif %}>Third Year</option>
+                                    <option value="BE" {% if course.course_year == 'BE' %}selected{% endif %}>Final Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="imageInput">Course Thumbnail</label>
+                                <div class="mt-1 thumbnail-box d-flex flex-column align-items-center justify-content-center rounded-2 border"
+                                    style="height:200px;">
+                                    <input type="file" class="form-control-file mb-2" id="imageInput" name="course_img"
+                                        accept="image/*" required>
+                                    <p class="text-center text-black mb-0">Drag and drop an image, or <span
+                                            class="text-warning">Browse</span></p>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_benefit">Benefits of the course</label>
+                                <textarea placeholder="Enter Benefits of the Course" class="mt-1 form-control" name="course_benefit" id="course_benefit" cols="30" rows="5" required>{{course.course_benefit}}</textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_req">Requirements/Instructions</label>
+                                <input class="mt-1 form-control" value="{{course.course_req}}" type="text" name="course_req"
+                                    id="course_req" placeholder="Enter Requirements of the course"
+                                    style="height:50px;" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end p-4 mt-2">
+                            <button type="submit" class="btn btn-warning p-2" style="width: 100px;">Change</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".sidebar div").click(function () {
+            // Remove the 'active' class from all divs inside the sidebar
+            $(".sidebar div").removeClass("active");
+
+            // Add the 'active' class to the clicked div
+            $(this).addClass("active");
+        });
+    });
+</script>
+{% endblock %}

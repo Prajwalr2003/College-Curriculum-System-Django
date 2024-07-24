@@ -1,0 +1,105 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 bg-dark text-white border-end">
+            <div class="sidebar mt-4 p-2" style="height:100vh;">
+                <a href="{% url 'academixapp:index' %}" class="text-decoration-none text-reset">
+                    <div class="dashboard p-2 rounded-2">
+                        <p class="mb-0"><i class="bi bi-house-door"></i> Home</p>
+                    </div>
+                </a>
+                <a href="{% url 'auth:myprofile' %}" class="text-decoration-none text-reset">
+                    <div class="profile p-2 rounded-2 mt-2">
+                        <p class="mb-0"><i class="bi bi-person"></i> My Profile</p>
+                    </div>
+                </a>
+                <hr class="mx-auto">
+                {% if user.profile %}
+                {% if user.profile.user_type|lower == 'teacher' %}
+                <p class="mb-2"><b><i class="bi bi-person"></i> Instructor</b></p>
+                <a href="{% url 'academixapp:mycourses' %}" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> My Courses</p>
+                    </div>
+                </a>
+                <a href="{% url 'academixapp:enrolledcourses' %}" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2 mt-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> Enrolled Courses</p>
+                    </div>
+                </a>
+                {% else %}
+                <p class="mb-2"><b><i class="bi bi-person"></i> Student</b></p>
+                <a href="#" class="text-decoration-none text-reset">
+                    <div class="courses-tab p-2 rounded-2">
+                        <p class="mb-0 ms-2"><i class="bi bi-book"></i> Enrolled Courses</p>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                <hr class="mx-auto">
+                <div class="profile logout p-2 rounded-2 mt-2">
+                    <a href="" class="text-decoration-none text-reset d-block"><i class="bi bi-box-arrow-right"></i>
+                        Log Out</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row mt-4">
+                {% if added_course %}
+                    {% for course in added_course %}
+                    <a href="{% url 'academixapp:add_course' %}"><button class="btn btn-warning float-end"><i class="bi bi-plus" style="border: 1px solid black; border-radius: 50%;"></i> Add Course</button></a>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ course.course_img.url }}" class="card-img-top" alt="{{ course.course_title }}" style="height:250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ course.course_title }}</h5>
+                                    <p class="card-text">Added: {{ course.date_created|date }}</p>
+                                    <a href="{% url 'academixapp:edit_course' course.slug %}" class="btn btn-warning">Edit Course</a>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ course.id }}">Delete</button>
+                                </div>
+                                <div class="modal fade" id="deleteModal{{ course.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ course.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel{{ course.id }}">Confirmation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this course?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                <!-- Button to delete the course -->
+                                                <a href="{% url 'academixapp:delete_course' course.slug %}" class="btn btn-danger">Yes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <a href="{% url 'academixapp:add_course' %}"><button class="btn btn-warning float-end"><i class="bi bi-plus" style="border: 1px solid black; border-radius: 50%;"></i> Add Course</button></a>
+                <div style="margin-top:14%;">
+                    <h2 class="text-center">No Courses Added Yet</h2>
+                </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".sidebar div").click(function () {
+            // Remove the 'active' class from all divs inside the sidebar
+            $(".sidebar div").removeClass("active");
+
+            // Add the 'active' class to the clicked div
+            $(this).addClass("active");
+        });
+    });
+</script>
+{% endblock %}
