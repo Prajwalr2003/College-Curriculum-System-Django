@@ -1,1 +1,1 @@
-# polling-application
+# College Curriculum System
