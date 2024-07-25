@@ -36,7 +36,6 @@ The College Curriculum System is a comprehensive platform designed to enhance th
 1. Clone the repository:
    ```bash
    git clone https://github.com/prajwalr2003/college-curriculum-system.git
-   cd college-curriculum-system
 2. Create and Activate Virtual Environment
    ```bash
    pip install virtualenv
@@ -44,6 +43,7 @@ The College Curriculum System is a comprehensive platform designed to enhance th
    virtualenv env
    cd env\Scripts
    activate
+   cd ../../college-curriculum-system
 3. Install Django in your System
    ```bash
    pip install django
