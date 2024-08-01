@@ -16,7 +16,6 @@ The College Curriculum System is a comprehensive platform designed to enhance th
 - **Student Enrollment**: Students can enroll in available courses and track their progress.
 - **Syllabus Tracking**: Students can mark syllabus subtopics as pending, done, or revisit.
 - **Branch-Specific Courses**: Courses displayed specific to different engineering branches.
-- **Notifications and Reminders**: Set reminders for important academic events and deadlines.
 - **Responsive Design**: Ensures a seamless experience across devices.
 
 ## Technologies Used
