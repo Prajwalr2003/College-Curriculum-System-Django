@@ -1,0 +1,60 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div id="courseSection" class="container section-title" data-aos="fade-up">
+            <h2>Courses</h2>
+            <p>Enrolled Courses</p>
+        </div>
+        {% if enrolled_courses %}
+        <div class="d-flex flex-row justify-content-start align-items-start flex-wrap" data-aos="zoom-in"
+            data-aos-delay="100">
+            {% for enrollment in enrolled_courses %}
+            <div class="card m-3">
+                <img src="{{ enrollment.course.course_img.url }}" class="card-img-top" alt="{{ course.course_title }}"
+                    style="width: 100%; height: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ enrollment.course.course_title }}</h5>
+                    <p class="card-text">Added: {{ enrollment.enrollment_date|date }}</p>
+                    <a href="{% url 'academixapp:view_course' enrollment.course.slug %}" class="btn"
+                        style="background-color: rgb(139, 219, 139);">View Progress</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal{{ enrollment.id }}">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Modals -->
+        {% for enrollment in enrolled_courses %}
+        <div class="modal fade" id="deleteModal{{ enrollment.id }}" tabindex="-1"
+            aria-labelledby="deleteModalLabel{{ enrollment.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ enrollment.id }}">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this enrolled course?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <a href="{% url 'academixapp:delete_enrollment' enrollment.id %}"
+                            class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class="mb-5" data-aos="fade-in">
+            <h2 class="text-center">No Course Currently Enrolled</h2>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

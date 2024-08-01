@@ -1,0 +1,77 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+
+<div class="container">
+    <div class="row mt-5 mb-5">
+        <div id="courseSection" class="container section-title" data-aos="fade-up">
+            <h2>Courses</h2>
+            <p>My Courses</p>
+            <a href="{% url 'academixapp:add_course' %}">
+                <button class="btn text-white" style="display: flex; align-items: center; gap: 5px; background-color:rgb(35, 108, 255)">
+                    <i class="bi bi-plus"
+                        style="border: 1px solid white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+                    </i> 
+                    Add Course
+                </button>
+            </a>            
+        </div>
+        {% if added_course %}
+        <div class="d-flex flex-row justify-content-start align-items-start flex-wrap" data-aos="zoom-in"
+            data-aos-delay="100">
+            {% for course in added_course %}
+            <div class="card m-3">
+                <img src="{{ course.course_img.url }}" class="card-img-top" alt="{{ course.course_title }}"
+                    style="width: 100%; height: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.course_title }}</h5>
+                    <p class="card-text">Added: {{ course.date_created|date }}</p>
+                    <a href=" {% url 'academixapp:edit_course' course.slug %}" class="btn"
+                        style="background-color: rgb(139, 219, 139);">Edit Course</a>
+                    <button class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal{{ course.id }}">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% for course in added_course %}
+        <div class="modal fade" id="deleteModal{{ course.id }}" tabindex="-1"
+            aria-labelledby="deleteModalLabel{{ course.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ course.id }}">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this course?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <!-- Button to delete the course -->
+                        <a href="{% url 'academixapp:delete_course' course.slug %}" class="btn btn-danger">Yes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="mb-5" data-aos="fade-in">
+            <h2 class="text-center">No Courses Added Yet</h2>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".sidebar div").click(function () {
+            // Remove the 'active' class from all divs inside the sidebar
+            $(".sidebar div").removeClass("active");
+
+            // Add the 'active' class to the clicked div
+            $(this).addClass("active");
+        });
+    });
+</script>
+{% endblock %}

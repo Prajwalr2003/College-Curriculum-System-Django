@@ -1,0 +1,240 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+
+{% csrf_token %}
+{% if messages %}
+{% for message in messages %}
+    <h3 class="text-danger text-center my-2">{{ message }}</h3>
+{% endfor %}
+{% endif %}
+<div class="page-title" data-aos="fade">
+    <div class="heading">
+    <div class="container">
+        <div class="row d-flex justify-content-center text-center">
+        <div class="col-lg-8">
+            <h1>{{ course.course_title }}</h1>
+            <p class="mb-0">{{ course.course_desc }}</p>            
+        </div>
+        </div>
+    </div>
+    </div>
+    <nav class="breadcrumbs">
+    <div class="container">
+        <ol>
+        <li><a href="/">Home</a></li>
+        <li class="current">Course</li>
+        <li class="current">{{course.course_title}}</li>
+        </ol>
+    </div>
+    </nav>
+</div>
+
+<div id="courses-course-details" class="courses-course-details section">
+    <div class="container" data-aos="fade-up">
+    <div class="row">
+        <div class="col-lg-8 mb-2">
+            <img src="{{course.course_img.url}}" class="img-fluid" alt="" style="width:100%; height:400px;">
+        </div>
+        <div class="col-lg-4">
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Trainer</h5>
+                <p><a href="#">{{course.instructor.first_name}} {{course.instructor.last_name}}</a></p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Course Fee</h5>
+                <p>$0</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Branch</h5>
+                <p>{{course.course_branch}}</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Year</h5>
+                <p>{{course.course_year}}</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Lectures</h5>
+                <p>{{course.course_lectures}} hrs/Week</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Tutorial</h5>
+                <p>{{course.course_tutorial}}</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center">
+                <h5>Total Credits</h5>
+                <p>{{course.course_credit}}</p>
+            </div>
+            <form method="POST" action="{% url 'academixapp:view_course' course.slug %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary w-100">Enroll</button>
+            </form> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="border"></div>
+            <div class="box border mt-4 p-4">
+                <h4>Course Outcome</h4>
+                <p>{{course.course_benefit}}</p>
+            </div>
+            <div class="mt-4">
+                <h4>Course Content</h4>
+                <div class="box border p-4 shadow">
+                    {% for unit in course.units.all %}
+                    <p class="scrollDownBtn mt-3 p-3 text-white" style="cursor: pointer; background-color: rgb(76, 81, 76);">Unit {{ forloop.counter }} : {{ unit.title }}<i class="bi bi-arrow-down"></i>
+                    </p>
+                    <div class="subtopic-container px-3 hidden-content">
+                        {% for subtopic in unit.subtopics.all %}
+                        <div class="row border mt-2 p-2">
+                            <div class="col-md-2">
+                                <select id="status_{{ subtopic.id }}" name="status" class="form-control status-select">
+                                <option value="Pending" {% if subtopic.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Done" {% if subtopic.status == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Revisit" {% if subtopic.status == 'Revisit' %}selected{% endif %}>Revisit</option>
+                                </select>
+                            </div>
+                            <div class="col-md-10">
+                                <p class="mt-2 mb-0">{{ subtopic.title }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mt-4">
+                <h4>Add Reviews & Comments</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-start align-items-center">
+                        <img src="{{ request.user.profile.profile_img.url }}" alt="profile_img" class="rounded-pill" style="width: 40px; height: 40px;">
+                        <a href="" class="text-decoration-none text-reset fw-bold my-2 p-2">{{request.user.username}}</a>
+                    </div>
+                    <input type="text" name="comment" id="comment" class="form-control" placeholder="Enter comment">
+                    <button class="btn btn-success mt-2">Add Comment</button>
+                </form>
+            </div>
+            <div class="mt-4">
+                <h4>Add your Notes to help others</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <a href="" class="text-decoration-none text-reset"><img src="" alt=""> Student Name</a>
+                    <div class="mt-1 border thumbnail-box d-flex flex-column align-items-center justify-content-center rounded-2"
+                        style="height:200px; width: 500px;">
+                        <input type="file" class="form-control-file mb-2" id="imageInput" name="course_img"
+                            accept="image/*">
+                    </div>
+                    <button class="btn btn-success mt-2">Add Notes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<style>
+    /* Pop-Up */
+    .hidden-content {
+        display: none;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 1px solid #ccc;
+        width:20%;
+        height:20%;
+        z-index: 9999;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    }
+
+    .popup-content {
+        /* Add styling for the content inside the popup */
+        background-color: #fefefe;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    function updateSubtopicStatus(selectElement) {
+      var subtopicId = selectElement.value.split('_')[1]; 
+      var newStatus = selectElement.value;
+    
+      // Send AJAX request
+      fetch('/update_subtopic_status/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `subtopic_id=${subtopicId}&new_status=${newStatus}`
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Handle response from the server (e.g., display success message)
+        console.log(data);  // For debugging
+      })
+      .catch(error => {
+        console.error('Error updating status:', error);
+      });
+    }
+    
+    // Add event listener to the status select elements
+    document.querySelectorAll('.status-select').forEach(selectElement => {
+      selectElement.addEventListener('change', function() {
+        updateSubtopicStatus(this);
+      });
+    });
+</script>
+    
+<script>
+    function submitForm(selectElement) {
+        var form = selectElement.closest('form');
+        if (form) {
+            form.submit();
+        } else {
+            alert("Form element not found!");
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('click', function (event) {
+            var target = event.target;
+            if (target.classList.contains('scrollDownBtn')) {
+                var contentElement = target.nextElementSibling;
+                if (contentElement) {
+                    contentElement.classList.toggle('hidden-content');
+                    if (contentElement.classList.contains('hidden-content')) {
+                        contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+        });
+    });
+
+    function openPopup() {
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
+{% endblock %}

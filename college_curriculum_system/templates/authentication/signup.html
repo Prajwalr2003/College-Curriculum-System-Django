@@ -1,0 +1,44 @@
+{% extends 'academixapp/base.html' %} {% block body %}
+<div class="d-flex justify-content-center align-items-center bg-body-tertiary" style="height: 90vh">
+  <div style="max-width: 400px; width: 100%" ;>
+    <form method="POST" class="form-signin">
+      {% csrf_token %}
+      <div>
+        {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger p-2 fw-bold">{{message}}</p>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <h1 class="h3 mb-3 fw-normal text-center">
+        Please Signup for an account
+      </h1>
+
+      <div class="form-floating mb-3">
+        <input type="username" id="username" name="username" class="form-control" placeholder="name@example.com" />
+        <label for="username">Username</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" id="email" name="email" class="form-control" placeholder="email" />
+        <label for="email">Email address</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" />
+        <label for="password">Password</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+          placeholder="Password" />
+        <label for="confirm_password">Confirm Password</label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
+    </form>
+    <div class="mt-4">
+      <p class="text-center">
+        Have an account?
+        <a href="{% url 'auth:login' %}" class="text-primary font-bold">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

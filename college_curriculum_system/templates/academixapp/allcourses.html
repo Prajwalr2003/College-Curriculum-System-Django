@@ -1,0 +1,55 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+<div class="page-title" data-aos="fade">
+  <div class="heading">
+    <div class="container">
+      <div class="row d-flex justify-content-center text-center">
+        <div class="col-lg-8">
+          <h1>Courses</h1>
+          <p class="mb-0">Discover a wide array of courses tailored to help you excel in your chosen field. Explore our
+            courses today and take the next step in your educational journey!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li class="current">Courses</li>
+      </ol>
+    </div>
+  </nav>
+</div>
+
+<div id="courses" class="courses section">
+  <div class="container">
+    <div class="row">
+      {% for course in course_list %}
+      <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item">
+          <img src="{{ course.course_img.url }}" class="img-fluid" alt="{{ course.course_title }}" style="width: 100%; height: 300px;"/>
+          <div class="course-content">
+            <h3><a href="{% url 'academixapp:view_course' course.slug %}">{{ course.course_title }}</a></h3>
+            <p class="description">
+              Created on : {{ course.date_created|date }}
+            </p>
+            <div class="trainer d-flex justify-content-between align-items-center">
+              <div class="trainer-profile d-flex align-items-center">
+                {% for profile in profiles %}
+                {% if course.instructor.username == profile.user.username %}
+                <img src="{{ profile.profile_img.url }}" class="img-fluid rounded-pill" alt="" />
+                <div class="trainer-link">{{ course.instructor.first_name }} {{ course.instructor.last_name }}</div>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

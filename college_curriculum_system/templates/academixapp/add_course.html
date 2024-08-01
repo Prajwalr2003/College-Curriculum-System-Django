@@ -1,0 +1,109 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9 m-auto mt-4">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <button class="btn bg-success text-white btn-sm rounded-pill"
+                    style="width:2rem; height:2rem;">
+                    1
+                    </button>
+                    <span class="bg-success w-25 rounded mt-auto mb-3"
+                    style="height: 0.2rem"></span>
+                    <button class="btn text-white btn-sm rounded-pill"
+                    style="width:2rem; height:2rem; border: 2px solid black;">
+                    <p class="text-black">2</p>
+                    </button>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="col-md-8">
+                        <div class="p-4 mt-2 rounded-4">
+                            <div class="form-group">
+                                <label for="course_title" class="fw-bold">Course Title <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control mt-1 border" name="course_title"
+                                    id="course_title" style="height:50px;" placeholder="Enter Course Title" value="{{course.course_title}}" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_desc" class="fw-bold">Course Description <span class="text-danger">*</span></label>
+                                <textarea placeholder="Enter Description of the Course" class="mt-1 form-control border" name="course_desc" id="course_desc" cols="30" rows="5" required>{{course.course_desc}}</textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_branch" class="fw-bold">Course Branch <span class="text-danger">*</span></label><br />
+                                <select class="mt-1 form-control border" style="height:50px;" name="course_branch" id="course_branch" required>
+                                    <option value="COMPSA" {% if course.course_branch == 'COMPSA' %}selected{% endif %}>COMPSA</option>
+                                    <option value="ITSA" {% if course.course_branch == 'ITSA' %}selected{% endif %}>ITSA</option>
+                                    <option value="TEESA" {% if course.course_branch == 'TEESA' %}selected{% endif %}>TEESA</option>
+                                    <option value="EESA" {% if course.course_branch == 'EESA' %}selected{% endif %}>EESA</option>
+                                    <option value="MESA" {% if course.course_branch == 'MESA' %}selected{% endif %}>MESA</option>
+                                    <option value="CESA" {% if course.course_branch == 'CESA' %}selected{% endif %}>CESA</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_year" class="fw-bold">Course Year <span class="text-danger">*</span></label><br />
+                                <select class="mt-1 form-control border" style="height:50px;" name="course_year" id="course_year" required>
+                                    <option value="FY" {% if course.course_year == 'FY' %}selected{% endif %}>First Year</option>
+                                    <option value="SY" {% if course.course_year == 'SY' %}selected{% endif %}>Second Year</option>
+                                    <option value="TY" {% if course.course_year == 'TY' %}selected{% endif %}>Third Year</option>
+                                    <option value="BE" {% if course.course_year == 'BE' %}selected{% endif %}>Final Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_credit" class="fw-bold">Course Credit <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control mt-1 border" name="course_credit"
+                                    id="course_credit" style="height:50px;" placeholder="Enter Course credit" value="{{course.course_credit}}" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_tutorial" class="fw-bold">Course tutorial <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control mt-1 border" name="course_tutorial"
+                                    id="course_tutorial" style="height:50px;" placeholder="Enter Course tutorial" value="{{course.course_tutorial}}" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_lectures" class="fw-bold">Course lectures (hrs/week)<span class="text-danger">*</span></label>
+                                <input type="number" class="form-control mt-1 border" name="course_lectures"
+                                    id="course_lectures" style="height:50px;" placeholder="Enter Course tutorial" value="{{course.course_lectures}}" required>
+                            </div>
+                            {% if course.course_img %}
+                            <div class="form-group mt-3">
+                                <label for="imageInput" class="fw-bold">Course Thumbnail <span class="text-danger">*</span></label>
+                                <div class="mt-1 thumbnail-box d-flex flex-column align-items-center justify-content-center rounded-2 border"
+                                    style="height:200px;">
+                                    <img src="{{ course.course_img.url }}" alt="course_img" style="width:fit-content; height:120px;">
+                                    <input type="file" class="form-control-file mb-2 w-10 mt-2" id="imageInput" name="course_img"
+                                        accept="image/*">
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="form-group mt-3">
+                                <label for="imageInput" class="fw-bold">Course Thumbnail <span class="text-danger">*</span></label>
+                                <div class="mt-1 thumbnail-box d-flex flex-column align-items-center justify-content-center rounded-2 border"
+                                    style="height:200px;">
+                                    <input type="file" class="form-control-file mb-2" id="imageInput" name="course_img"
+                                        accept="image/*" required>
+                                    <p class="text-center text-black mb-0">Drag and drop an image, or <span
+                                            class="text-warning">Browse</span></p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="form-group mt-3">
+                                <label for="course_benefit" class="fw-bold">Benefits of the course <span class="text-danger">*</span></label>
+                                <textarea placeholder="Enter Benefits of the Course" class="mt-1 form-control" name="course_benefit" id="course_benefit" cols="30" rows="5" required>{{course.course_benefit}}</textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="course_req" class="fw-bold">Requirements/Instructions <span class="text-danger">*</span></label>
+                                <input class="mt-1 form-control" value="{{course.course_req}}" type="text" name="course_req"
+                                    id="course_req" placeholder="Enter Requirements of the course"
+                                    style="height:50px;" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end p-4 mt-2">
+                            <button type="submit" class="btn btn-success p-2" style="width: 100px;">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'academixapp/base.html' %}
+{% block body %}
+
+<div class="container">
+  <div class="row">
+    <div class="d-flex flex-column justify-content-center align-items-center m-auto"
+      style="top:50%;height:80vh;width: 100vh;">
+      <p class="text-success fw-bold">404</p>
+      <h3>Page not found</h3>
+      <p>Sorry, we couldn't find the page you are looking for.</p>
+      <a href="{% url 'academixapp:index' %}" class="btn btn-primary">Go to Home</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

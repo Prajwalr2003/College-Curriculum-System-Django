@@ -1,0 +1,182 @@
+{% extends 'academixapp/base.html' %} {% block body %}
+<!-- Hero Section -->
+<section id="hero" class="hero section dark-background">
+  <img src="/media/assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
+
+  <div class="container" id="heroSection">
+    <h2 data-aos="fade-up" data-aos-delay="100">
+      Learn Today,<br />Explore College Curriculum
+    </h2>
+    <p data-aos="fade-up" data-aos-delay="200">
+      I am a passionate developer creating innovative educational platforms.
+    </p>
+    <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+      <a href="{% url 'academixapp:all_courses' %}" class="btn-get-started">Get Started</a>
+    </div>
+  </div>
+</section>
+<!-- /Hero Section -->
+
+<!-- About Section -->
+<section id="about" class="about section">
+  <div class="container" id="aboutSection">
+    <div class="row gy-4">
+      <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+        <img src="/media/assets/img/about.jpg" class="img-fluid" alt="" />
+      </div>
+
+      <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+        <h3>College Curriculum System</h3>
+        <p class="fst-italic">
+          The College Curriculum System is a comprehensive platform designed to
+          enhance the academic experience for students, faculty, and
+          administrators.
+        </p>
+        <ul>
+          <li>
+            <i class="bi bi-check-circle"></i>
+            <span>This system provides an efficient way to manage courses, track
+              student progress, and facilitate communication within an
+              educational institution.
+            </span>
+          </li>
+          <li>
+            <i class="bi bi-check-circle"></i>
+            <span>Courses displayed specific to different engineering
+              branches.</span>
+          </li>
+          <li>
+            <i class="bi bi-check-circle"></i>
+            <span>Students can enroll in available courses and track their
+              progress.</span>
+          </li>
+          <li>
+            <i class="bi bi-check-circle"></i>
+            <span>This project involves courses from all branches of engineering at
+              Government College of Engineering, Aurangabad</span>
+          </li>
+        </ul>
+        <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /About Section -->
+
+<!-- Counts Section -->
+<section id="counts" class="section counts light-background">
+  <div id="countSection" class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="{{total_users}}" data-purecounter-duration="1"
+            class="purecounter"></span>
+          <p>Total Users</p>
+        </div>
+      </div>
+      <!-- End Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="{{course_count}}" data-purecounter-duration="1"
+            class="purecounter"></span>
+          <p>Courses</p>
+        </div>
+      </div>
+      <!-- End Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="{{student_count}}" data-purecounter-duration="1"
+            class="purecounter"></span>
+          <p>Students</p>
+        </div>
+      </div>
+      <!-- End Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="{{teacher_count}}" data-purecounter-duration="1"
+            class="purecounter"></span>
+          <p>Teachers</p>
+        </div>
+      </div>
+      <!-- End Stats Item -->
+    </div>
+  </div>
+</section>
+<!-- /Counts Section -->
+
+<!-- Courses Section -->
+<section id="courses" class="courses section">
+  <!-- Section Title -->
+  <div id="courseSection" class="container section-title" data-aos="fade-up">
+    <h2>Courses</h2>
+    <p>Our All Courses</p>
+  </div>
+  <!-- End Section Title -->
+
+  <div class="container">
+    <div class="row">
+      {% for course in courses %}
+      <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item">
+          <img src="{{ course.course_img.url }}" class="img-fluid" alt="{{ course.course_title }}" style="width:100%; height: 300px;" />
+          <div class="course-content">
+            <h3><a href="{% url 'academixapp:view_course' course.slug %}">{{ course.course_title }}</a></h3>
+            <p class="description">
+              Created on : {{ course.date_created|date }}
+            </p>
+            <div class="trainer d-flex justify-content-between align-items-center">
+              <div class="trainer-profile d-flex align-items-center">
+                {% for profile in profiles %}
+                {% if course.instructor.username == profile.user.username %}
+                <img src="{{ profile.profile_img.url }}" class="img-fluid rounded-pill" alt="" />
+                <div class="trainer-link">{{ course.instructor.first_name }} {{ course.instructor.last_name }}</div>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- /Courses Section -->
+
+<!-- Trainers Index Section -->
+<section id="trainers-index" class="section trainers-index">
+  <div id="trainerSection" class="container section-title" data-aos="fade-up">
+    <h2>Instructors</h2>
+    <p>Popular Instructors</p>
+  </div>
+  <div class="container">
+    <div class="row">
+      {% for profile in profiles %}
+      {% if profile.user_type == 'TEACHER' %}
+      <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+        <div class="member">
+          <img src="{{ profile.profile_img.url }}" class="img-fluid" alt="" style="width:100%; height: 400px;" />
+          <div class="member-content">
+            <h4>{{profile.user.first_name}} {{profile.user.last_name}}</h4>
+            <span>{{profile.branch}}</span>
+            <p>
+              {{profile.email}}
+            </p>
+            <div class="social">
+              <a href=""><i class="bi bi-twitter-x"></i></a>
+              <a href=""><i class="bi bi-facebook"></i></a>
+              <a href=""><i class="bi bi-instagram"></i></a>
+              <a href=""><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

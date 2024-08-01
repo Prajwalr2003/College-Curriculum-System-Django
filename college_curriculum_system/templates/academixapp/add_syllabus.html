@@ -1,0 +1,78 @@
+{% extends 'academixapp/base.html' %}
+{% load custom_tags %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 m-auto mt-4 mb-5">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <button class="btn bg-success text-white btn-sm rounded-pill" style="width:2rem; height:2rem;">
+                        1
+                    </button>
+                    <span class="bg-success w-25 rounded mt-auto mb-3" style="height: 0.2rem"></span>
+                    <button class="btn bg-success text-white btn-sm rounded-pill" style="width:2rem; height:2rem;">
+                        2
+                    </button>
+                </div>
+                <div class="container">
+                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                    <div class="row">
+                        <div class="box mt-4 p-4">
+                            <label for="course_title">
+                                <h3>Course Title - {{course.course_title}}</h3>
+                            </label>
+                            <div class="border mt-3"></div>
+                            <label for="course_title">
+                                <h3 class="mt-3">Course Content</h3>
+                            </label>
+                            <div id="unit_fields">
+                                <!-- Add Here Input Fields  -->
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" id="add_unit" class="btn btn-primary">Add Unit</button>
+                                <input type="submit" value="Save Syllabus" class="btn"
+                                    style="background-color: rgb(48, 234, 48);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var unitCount = 0;
+        var subtopicCounts = {}; // Object to store subtopic counts for each unit
+
+        // Function to add a new unit field
+        $('#add_unit').click(function () {
+            unitCount++;
+            subtopicCounts[unitCount] = 0; // Initialize subtopic count for the new unit
+            var newUnitField = `
+            <div>
+                <label for="unit_${unitCount}" class="fw-bold">Unit ${unitCount} Title</label>
+                <input type="text" id="unit_${unitCount}" name="unit_titles_${unitCount}" class="form-control mt-1" placeholder="Enter chapter name" required>
+                <div class="subtopic_fields_${unitCount}"></div>
+                <button type="button" class="add_subtopic btn btn-primary mt-2 mb-2" data-unit="${unitCount}" style="width:150px;">Add Subtopic</button>
+            </div>`;
+            $('#unit_fields').append(newUnitField);
+        });
+
+        // Function to add a new subtopic field
+        $(document).on('click', '.add_subtopic', function () {
+            var unitId = $(this).data('unit');
+            subtopicCounts[unitId]++;
+            var subtopicCount = subtopicCounts[unitId];
+            var newSubtopicField = `
+          <div>
+            <input type="text" name="unit_${unitId}_subtopic_titles_${subtopicCount}" class="form-control mt-2" placeholder="Enter subtopic name" style="margin-left:30px;width:90%;" required>
+          </div>`;
+            $(`.subtopic_fields_${unitId}`).append(newSubtopicField);
+        });
+    });
+</script>
+
+{% endblock %}

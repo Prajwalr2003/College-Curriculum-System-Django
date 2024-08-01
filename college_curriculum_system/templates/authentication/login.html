@@ -1,0 +1,45 @@
+{% extends 'academixapp/base.html' %} {% block body %}
+<div class="d-flex justify-content-center align-items-center bg-body-tertiary" style="height: 85vh">
+  <div style="max-width: 400px; width: 100%" ;>
+    <form method="POST" class="form-signin">
+      {% csrf_token %}
+      <div>
+        {% for message in messages %}
+        <p class="text-danger p-2 m-auto fw-bold">{{message}}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <p class="p-2 mb-0 fw-bold">To explore the features, you can log in with:</p>
+        <p class="text-danger p-2 mt-0 fw-bold">Username: demo, Password: demo</p>
+      </div>
+      <h1 class="h3 mb-3 fw-normal text-center">
+        Please Login to your account
+      </h1>
+
+      <div class="form-floating mb-3">
+        <input type="username" id="username" name="username" class="form-control" placeholder="name@example.com" />
+        <label for="username">Username</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" id="password" name="password" class="form-control" id="floatingPassword"
+          placeholder="Password" />
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      <div class="form-check text-start mb-3">
+        <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
+        <label class="form-check-label" for="flexCheckDefault">
+          Remember me
+        </label>
+      </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">Login</button>
+    </form>
+    <div class="mt-4">
+      <p class="text-center">
+        Doesn't have an account?
+        <a href="{% url 'auth:signup' %}" class="text-primary font-bold">Sign up</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
